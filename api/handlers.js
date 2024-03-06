@@ -1,3 +1,5 @@
+const { randomUUID } = require('crypto')
+
 const { json } = require("stream/consumers")
 
 const previousResults = new Map()
@@ -45,5 +47,25 @@ module.exports.sendResponse = async (event) => {
         headers: {
             'Content-Type': 'application/json'
         }
+    }
+}
+
+module.exports.getResult = async(event) => {
+    const result = previousResults.get(event.pathParameters.id)
+    if (!result) {
+        return {
+            statusCode: 404,
+            body: JSON.stringify({error: 'Result not found'}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    }
+    return {
+        statusCode: 200,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(result)
     }
 }
