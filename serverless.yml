@@ -1,0 +1,25 @@
+org: luizfelipew
+app: alura-activities
+service: aws-node-http-api-project
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  sendResponse:
+    handler: api/handler.sendResponse
+    events: 
+      - httpApi:
+          path: /api/results
+          method: post
+          request:
+            schemas: 
+              applcation/json: ${file(./schemas/sendResponse.json)}
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
